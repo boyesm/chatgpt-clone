@@ -6,7 +6,7 @@ import gradio as gr
 #openai.api_key = os.getenv("OPENAI_API_KEY")
 
 #if you have OpenAI API key as a string, enable the below
-openai.api_key = "xxxxxx"
+openai.api_key = ""
 
 start_sequence = "\nAI:"
 restart_sequence = "\nHuman: "
@@ -15,9 +15,11 @@ prompt = "The following is a conversation with an AI assistant. The assistant is
 
 def openai_create(prompt):
 
-    response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt=prompt,
+    message = [{"role": "user", "content": prompt}]
+
+    response = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=message,
     temperature=0.9,
     max_tokens=150,
     top_p=1,
@@ -26,7 +28,7 @@ def openai_create(prompt):
     stop=[" Human:", " AI:"]
     )
 
-    return response.choices[0].text
+    return response["choices"][0]["message"]["content"]
 
 
 
